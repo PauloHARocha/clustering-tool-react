@@ -25,7 +25,7 @@ class MetricIterationApp extends Component {
     })
   }
   createMetricCharts(values) {
-    if (values.k === undefined)
+    if (values.k === undefined || values.n_sim === undefined)
       return alert('Set value of k');
     if (this.state.loading)
       return alert('Wait for the last experiment');
@@ -42,7 +42,7 @@ class MetricIterationApp extends Component {
     //     // clusters: result.clusters,
     //     met_results: response.results,
     //   })
-    ClusteringAPI.getMultiMetricIterations(values.dataset, values.algorithm, values.k, 30)
+    ClusteringAPI.getMultiMetricIterations(values.dataset, values.algorithm, values.k, values.n_sim)
     .then(response => {
       this.setState({
         loading: false,

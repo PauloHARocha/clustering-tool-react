@@ -32,6 +32,10 @@ class CreateMetricIteration extends Component {
                         <label htmlFor="k">k</label>
                         <input type="number" name="k" max="50" min="2" placeholder='2'/>
                     </div>
+                    <div className='form-element'>
+                        <label htmlFor="n_sim">n sim</label>
+                        <input type="number" name="n_sim" max="30" min="1" placeholder='1' />
+                    </div>
                     <input type='submit' value='Run' className='btn'/>
                 </form>
             </section>
