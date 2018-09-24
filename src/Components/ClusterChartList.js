@@ -35,14 +35,14 @@ class ClusterChartList extends Component {
         clusterPoints.forEach(cp => {
             let cluster_size = Object.keys(cp);
             cluster_size = cluster_size.length;
-            console.log(cluster_size);
+            
             data.push({
                 type: "scatter",
                 toolTipContent: "x: {x}<br>y: {y}",
                 markerType: 'circle',
                 markerSize: 2,
-                // name: `${cp.size()}`,
-                // showInLegend: true,
+                name: `${cluster_size}`,
+                showInLegend: true,
                 dataPoints: cp
             })
         })

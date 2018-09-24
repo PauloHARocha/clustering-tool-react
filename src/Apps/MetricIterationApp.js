@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import CreateMetricIteration from '../Components/CreateMetricIteration'
 // import Iterator from './Iterator'
-import MetricChartList from '../Components/MetricChartList'
+// import MetricChartList from '../Components/MetricChartList'
+import MultiMetricChartList from '../Components/MultiMetricChartList'
 import Loader from '../Components/Loader'
 import * as ClusteringAPI from '../utils/ClusteringAPI'
 
@@ -33,7 +34,15 @@ class MetricIterationApp extends Component {
         loading: true,
         met_results: [],
       })
-    ClusteringAPI.getMetricIterations(values.dataset, values.algorithm, values.k)
+    // ClusteringAPI.getMetricIterations(values.dataset, values.algorithm, values.k)
+    // .then(response => {
+    //   this.setState({
+    //     loading: false,
+    //     // centroids: result.centroids,
+    //     // clusters: result.clusters,
+    //     met_results: response.results,
+    //   })
+    ClusteringAPI.getMultiMetricIterations(values.dataset, values.algorithm, values.k, 30)
     .then(response => {
       this.setState({
         loading: false,
@@ -57,7 +66,8 @@ class MetricIterationApp extends Component {
         />
         <Loader loading={this.state.loading}/>
         {/* <Iterator iterations={this.state.centroids}/> */}
-        <MetricChartList met_results={this.state.met_results}/>
+        {/* <MetricChartList met_results={this.state.met_results}/> */}
+        <MultiMetricChartList met_results={this.state.met_results}/>
       </main>
     );
   }
