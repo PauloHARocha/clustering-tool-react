@@ -52,8 +52,8 @@ class CustomDSApp extends Component {
                 />
                 <Loader loading={this.state.loading} />
                 {/* <Iterator iterations={this.state.centroids}/> */}
-                <MetricChartList  met_results={this.state.met_results} />
                 <ClusterChartList ds_results={this.state.ds_results}/>
+                <MetricChartList  met_results={this.state.met_results} />
             </main>
         );
     }
