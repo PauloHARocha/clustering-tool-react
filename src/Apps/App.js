@@ -12,16 +12,16 @@ class App extends Component {
                 <header className="navigation">
                     <h1>Clustering tool</h1>
                     <button tabIndex='-1' className="navigation-link">
-                        <Link to='/' >Metric Iterations</Link>
+                        <Link to='/clustering-tool-react' >Metric Iterations</Link>
                     </button>
                     <button tabIndex='-1' className="navigation-link">
-                        <Link to='/customds' >CustomDS</Link>
+                        <Link to='/clustering-tool-react/customds' >CustomDS</Link>
                     </button>
                 </header>
-                <Route exact path='/' render={() => (
+                <Route exact path='/clustering-tool-react' render={() => (
                     <MetricIterationApp />
                 )}/>
-                <Route exact path='/customds' render={() => (
+                <Route exact path='/clustering-tool-react/customds' render={() => (
                     <CustomDSApp/>
                 )} />                
             </div>
