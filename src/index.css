@@ -7,7 +7,7 @@ label{
     display: block;
 }
 
-h2 {
+h2, p{
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;  
 }
 
@@ -107,6 +107,11 @@ h2 {
     display: inline-block;
 }
 
+.chart-container-medium {
+    width: 25%;
+    display: inline-block;
+}
+
 .chart-container-small {
     width: 16.6%;
     display: inline-block;
@@ -116,14 +121,19 @@ h2 {
     width: 100%;
     margin: auto;
 }
+
+.loader-content p {
+    position: relative;
+    text-align: center;
+}
 /*
     Spinner load
  */
 .loader {
     visibility: visible;
     z-index: 100;
-    margin-left: 49%;
-    position: absolute;
+    position: relative;
+    margin: auto;
     border: 7px solid #f3f3f3; /* Cinza claro */
     border-top: 7px solid deepskyblue; /* Azul */
     border-radius: 50%;

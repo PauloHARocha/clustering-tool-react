@@ -5,14 +5,25 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 class MultiMetricChartList extends Component {
     generateOptions(metric) {
-        console.log(metric)
-        let points = metric.values.map((itr) => (
+        let onClick = this.props.onClickChart;
+        let points = metric.values.map((sim, sim_idx) => (
             {
                 type: "line",
-                toolTipContent: "Iteration: {x}<br>Value: {y}",
-                dataPoints: itr.map((value, idx) => (
-                    { x: idx, y: value }
-                ))
+                name: sim_idx.toString(),
+                toolTipContent: "Simulation: {name}<br>Iteration: {x}<br>Value: {y}",
+                dataPoints: sim.map((itr, itr_idx) => (
+                    {
+                        x: itr_idx, 
+                        y: itr,
+                        click: e => (
+                            onClick({
+                                n_sim: sim_idx,
+                                itr: e.dataPoint.x,
+                            })
+                        ), 
+                        }
+                )),
+                
             }
             
         ))
@@ -20,6 +31,7 @@ class MultiMetricChartList extends Component {
             animationEnabled: true,
             exportEnabled: true,
             exportFileName: `${metric.name}Chart`,
+            zoomEnabled: true,
             theme: "light2", // "light1", "dark1", "dark2"
             title: {
                 text: metric.name

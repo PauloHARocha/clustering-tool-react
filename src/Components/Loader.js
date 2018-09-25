@@ -6,7 +6,10 @@ class Loader extends Component {
         const { loading } = this.props;
         return(
             <div className='loader-container'>
-                {loading && (<div className="loader"></div>)}
+                {loading && (<div className='loader-content'>
+                    <div className="loader"></div>
+                    <p>Do not change section, this can take a few minutes . . .</p>
+                    </div>)}
             </div>
         ) 
             

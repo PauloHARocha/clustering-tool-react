@@ -1,4 +1,4 @@
-const api = 'http://localhost:5000'
+const api = 'https://api-clustering.herokuapp.com'
 
 export const getMetricIterations = (dataset, algorithm, k) =>     
     fetch(`${api}/metrics_iterations/${dataset}/${algorithm}/${k}`)

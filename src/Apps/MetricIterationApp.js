@@ -3,6 +3,7 @@ import CreateMetricIteration from '../Components/CreateMetricIteration'
 // import Iterator from './Iterator'
 // import MetricChartList from '../Components/MetricChartList'
 import MultiMetricChartList from '../Components/MultiMetricChartList'
+import ClusterChartIteration from '../Components/ClusterChartIteration'
 import Loader from '../Components/Loader'
 import * as ClusteringAPI from '../utils/ClusteringAPI'
 
@@ -12,9 +13,12 @@ class MetricIterationApp extends Component {
     loading: false,
     datasets: [],
     algorithms: [],
-    // centroids: [],
-    // clusters: [],
+    centroids: [],
+    clusters: [],
     met_results: [],
+    show_cluster: false,
+    n_sim: 0,
+    itr: 0,
   }
   componentDidMount() {
     ClusteringAPI.getParam().then(param => {
@@ -25,14 +29,21 @@ class MetricIterationApp extends Component {
     })
   }
   createMetricCharts(values) {
-    if (values.k === undefined || values.n_sim === undefined)
+    if (values.k === undefined)
       return alert('Set value of k');
+    if (values.n_sim === undefined)
+      return alert('Set number of simulations');
     if (this.state.loading)
       return alert('Wait for the last experiment');
     this.setState(
       { 
         loading: true,
+        centroids: [],
+        clusters: [],
         met_results: [],
+        show_cluster: false,
+        n_sim: 0,
+        itr: 0,
       })
     // ClusteringAPI.getMetricIterations(values.dataset, values.algorithm, values.k)
     // .then(response => {
@@ -46,13 +57,21 @@ class MetricIterationApp extends Component {
     .then(response => {
       this.setState({
         loading: false,
-        // centroids: result.centroids,
-        // clusters: result.clusters,
+        centroids: response.centroids,
+        clusters: response.clusters,
         met_results: response.results,
       })
 
     });
     
+  }
+  createClusterChart(values){
+    this.setState({
+      show_cluster: true,
+      n_sim: values.n_sim,
+      itr: values.itr,
+
+    })
   }
   render() {
     return (
@@ -67,7 +86,20 @@ class MetricIterationApp extends Component {
         <Loader loading={this.state.loading}/>
         {/* <Iterator iterations={this.state.centroids}/> */}
         {/* <MetricChartList met_results={this.state.met_results}/> */}
-        <MultiMetricChartList met_results={this.state.met_results}/>
+        {this.state.show_cluster && (
+          <ClusterChartIteration
+            centroids={this.state.centroids[this.state.n_sim]}
+            clusters={this.state.clusters[this.state.n_sim]}
+            itr={this.state.itr} 
+            n_sim={this.state.n_sim} 
+          />
+        )}
+        <MultiMetricChartList 
+          met_results={this.state.met_results}
+          onClickChart = {values => (
+            this.createClusterChart(values)
+          )}
+          />
       </main>
     );
   }
