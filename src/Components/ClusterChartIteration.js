@@ -13,11 +13,11 @@ const colors = ["green", "red", "blue", "yellow", "purple",
     '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
 
 class ClusterChartIteration extends Component {
-    generateOptions(centroids, clusters, itr, d_idxs, n_sim) {
-        let centroidPoints = centroids[itr].map(c => (
+    generateOptions(centroids, clusters, d_idxs, title, height, axis) {
+        let centroidPoints = centroids.map(c => (
             { x: c.values[d_idxs.x], y: c.values[d_idxs.y] }
         ))
-        let clusterPoints = clusters[itr].map(c => (
+        let clusterPoints = clusters.map(c => (
             c.values.map(data => (
                 { x: data[d_idxs.x], y: data[d_idxs.y] }
             ))
@@ -41,7 +41,7 @@ class ClusterChartIteration extends Component {
                 markerType: 'circle',
                 markerSize: 4,
                 name: `${cluster_size}`,
-                color: colors[parseInt(idx)],
+                color: colors[parseInt(idx, 10)],
                 showInLegend: true,
                 dataPoints: cp
             })
@@ -56,45 +56,42 @@ class ClusterChartIteration extends Component {
             // exportFileName: 'chart',//`${centroid.name}Chart`,
             theme: "light2", // "light1", "dark1", "dark2"
             title: {
-                text: `Sim: ${n_sim} - Itr: ${itr}`//centroid.name
+                text: title//centroid.name
             },
             axisY: {
                 title: "Y",
                 includeZero: false,
-                maximum: 1,
-                minimum: 0,
+                maximum: axis.y.maximum,
+                minimum: axis.y.minimum,
                 // suffix: "%"
             },
             axisX: {
                 title: "X",
                 // prefix: "W",
-                maximum: 1,
-                minimum: 0,
+                maximum: axis.x.maximum,
+                minimum: axis.x.minimum,
             },
-            height: 250,
+            height: height,
             data: data
         }
     }
     getDimensionsIdxs = (d_length) =>{
         let idxs = [];
-        for (let x = 0; x < d_length; x++) {
-            for (let y = 0; y < d_length; y++) {
-                if (x < y) {
-                    idxs.push({x: x, y: y});
-                }
-            }
-        }
+        for (let x = 0; x < d_length; x++) 
+            for (let y = 0; y < d_length; y++) 
+                if (x < y) idxs.push({x: x, y: y});
         return idxs;
     }
     render() {
-        const { centroids, clusters, itr, n_sim } = this.props;
-        const dimensions_idx = this.getDimensionsIdxs(centroids[itr][0].values.length);
+        const { centroids, clusters, title, size, axis} = this.props;
+        const dimensions_idx = this.getDimensionsIdxs(centroids[0].values.length);
         return (
             <section className='list-chart-container'>
                 {dimensions_idx.map((d_idxs, idx) => (
-                    <div className='chart-container-medium' key={idx}>
+                    <div className={`chart-container-${size.width}`} key={idx}>
                         <CanvasJSChart
-                            options={this.generateOptions(centroids, clusters, itr, d_idxs, n_sim)}
+                            options={this.generateOptions(centroids, clusters, 
+                                d_idxs, title, size.height, axis)}
                         />
                     </div>
                 ))}

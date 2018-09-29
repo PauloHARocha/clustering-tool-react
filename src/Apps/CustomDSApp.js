@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import CreateCustomDS from '../Components/CreateCustomDS'
-import MetricChartList from '../Components/MetricChartList'
+import MultiMetricChartList from '../Components/MultiMetricChartList'
+import ClusterChartIteration from '../Components/ClusterChartIteration'
 import ClusterChartList from '../Components/ClusterChartList'
 import Loader from '../Components/Loader'
 import * as ClusteringAPI from '../utils/ClusteringAPI'
@@ -12,6 +13,9 @@ class CustomDSApp extends Component {
         algorithms: [],
         ds_results: [],
         met_results: [],
+        show_cluster: false,
+        n_sim: 0,
+        ds: 0,
     }
     componentDidMount() {
         ClusteringAPI.getParam().then(param => {
@@ -31,7 +35,7 @@ class CustomDSApp extends Component {
                 ds_results: [],
                 met_results: [],
             })
-        ClusteringAPI.getCustomDS(values.algorithm, values.k)
+        ClusteringAPI.getCustomDS(values.ds, values.algorithm, values.k)
             .then(response => {
                 this.setState({
                     loading: false,
@@ -41,19 +45,43 @@ class CustomDSApp extends Component {
             });
 
     }
+    createClusterChart(values) {
+        this.setState({
+            show_cluster: true,
+            n_sim: values.n_sim,
+            ds: values.itr,
+
+        })
+    }
     render() {
         return (
             <main >
                 <CreateCustomDS
                     algorithms={this.state.algorithms}
+                    ds={[0, 1]}
                     onCreateCustomDS={values => (
                         this.createMetricCharts(values)
                     )}
                 />
                 <Loader loading={this.state.loading} />
-                {/* <Iterator iterations={this.state.centroids}/> */}
-                <ClusterChartList ds_results={this.state.ds_results}/>
-                <MetricChartList  met_results={this.state.met_results} />
+                <ClusterChartList ds_results={this.state.ds_results} sim={this.state.n_sim} />
+                {this.state.show_cluster && (
+                    <ClusterChartIteration
+                        centroids={this.state.ds_results[this.state.ds].centroids[this.state.n_sim]}
+                        clusters={this.state.ds_results[this.state.ds].clusters[this.state.n_sim]}
+                        title={`Sim: ${this.state.n_sim} Ds: ${this.state.ds}`}
+                        axis={{ x: { minimum: -1, maximum: 1 }, y: { minimum: -1, maximum: 1 } }}
+                        size={{ heigth: 300, width: 'large' }} //large, medium, small
+                    />
+                )}
+                <MultiMetricChartList
+                    met_results={this.state.met_results}
+                    axis = {{x:'Values', y: 'Datasets'}}
+                    size={{ heigth: 300, width: 'large' }} //large, medium, small
+                    onClickChart={values => (
+                        this.createClusterChart(values)
+                    )}
+                />
             </main>
         );
     }

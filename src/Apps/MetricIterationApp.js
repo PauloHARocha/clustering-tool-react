@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import CreateMetricIteration from '../Components/CreateMetricIteration'
-// import Iterator from './Iterator'
-// import MetricChartList from '../Components/MetricChartList'
 import MultiMetricChartList from '../Components/MultiMetricChartList'
 import ClusterChartIteration from '../Components/ClusterChartIteration'
 import Loader from '../Components/Loader'
@@ -45,14 +43,7 @@ class MetricIterationApp extends Component {
         n_sim: 0,
         itr: 0,
       })
-    // ClusteringAPI.getMetricIterations(values.dataset, values.algorithm, values.k)
-    // .then(response => {
-    //   this.setState({
-    //     loading: false,
-    //     // centroids: result.centroids,
-    //     // clusters: result.clusters,
-    //     met_results: response.results,
-    //   })
+    
     ClusteringAPI.getMultiMetricIterations(values.dataset, values.algorithm, values.k, values.n_sim)
     .then(response => {
       this.setState({
@@ -84,18 +75,20 @@ class MetricIterationApp extends Component {
               )}
         />
         <Loader loading={this.state.loading}/>
-        {/* <Iterator iterations={this.state.centroids}/> */}
-        {/* <MetricChartList met_results={this.state.met_results}/> */}
+        
         {this.state.show_cluster && (
           <ClusterChartIteration
-            centroids={this.state.centroids[this.state.n_sim]}
-            clusters={this.state.clusters[this.state.n_sim]}
-            itr={this.state.itr} 
-            n_sim={this.state.n_sim} 
+            centroids={this.state.centroids[this.state.n_sim][this.state.itr]}
+            clusters={this.state.clusters[this.state.n_sim][this.state.itr]}
+            title={`Sim: ${this.state.n_sim} Itr: ${this.state.itr}`}
+            axis={{ x: { minimum: 0, maximum: 1 }, y: {minimum: 0, maximum:1}}}
+            size={{ heigth: 250, width: 'medium' }} //large, medium, small
           />
         )}
         <MultiMetricChartList 
           met_results={this.state.met_results}
+          axis={{ x: 'Values', y: 'Iterations' }}
+          size={{ heigth: 300, width: 'large'}} //large, medium, small
           onClickChart = {values => (
             this.createClusterChart(values)
           )}

@@ -8,10 +8,18 @@ class CreateCustomDS extends Component {
         this.props.onCreateCustomDS(values);
     }
     render() {
-        const { algorithms } = this.props
+        const { algorithms, ds } = this.props
         return (
             <section>
                 <form onSubmit={this.handleSubmit}>
+                    <div className='form-element'>
+                        <label htmlFor="ds">DS</label>
+                        <select name='ds' className="slc">
+                            {ds.map(d => (
+                                <option key={d} value={d}>{d}</option>
+                            ))}
+                        </select>
+                    </div>
                     <div className='form-element'>
                         <label htmlFor="algorithm">Algorithm</label>
                         <select name='algorithm' className="slc">

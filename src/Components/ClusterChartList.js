@@ -19,7 +19,7 @@ class ClusterChartList extends Component {
         ))
         let clusterPoints = clusters.map( c => (
             c.values.map(data => (
-                { x: data[0], y: data[1], color: colors[parseInt(c.name)] }
+                { x: data[0], y: data[1], color: colors[parseInt(c.name, 10)] }
             ))
         ))
         let data_centroid = {   
@@ -76,13 +76,13 @@ class ClusterChartList extends Component {
         }
     }
     render() {
-        const { ds_results } = this.props;
+        const { ds_results, sim } = this.props;
         return (
             <section className='list-chart-container'>
                 {ds_results.map( ds => (
                     <div className='chart-container-small' key={ds.name}>
                         <CanvasJSChart
-                            options={this.generateOptions(ds.centroids, ds.clusters, ds.name)}
+                            options={this.generateOptions(ds.centroids[sim], ds.clusters[sim], ds.name)}
                         />
                     </div>
                 ))}
