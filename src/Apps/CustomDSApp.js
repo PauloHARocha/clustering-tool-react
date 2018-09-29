@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import CreateCustomDS from '../Components/CreateCustomDS'
+import CreateScenario from '../Components/CreateScenario'
 import MultiMetricChartList from '../Components/MultiMetricChartList'
 import ClusterChartIteration from '../Components/ClusterChartIteration'
 import ClusterChartList from '../Components/ClusterChartList'
@@ -12,6 +13,7 @@ class CustomDSApp extends Component {
         loading: false,
         algorithms: [],
         ds_results: [],
+        scenarios: [],
         met_results: [],
         show_cluster: false,
         n_sim: 0,
@@ -20,7 +22,8 @@ class CustomDSApp extends Component {
     componentDidMount() {
         ClusteringAPI.getParam().then(param => {
             this.setState({
-                algorithms: param.algorithms
+                algorithms: param.algorithms,
+                scenarios: param.scenarios.customds
             })
         })
     }
@@ -29,19 +32,10 @@ class CustomDSApp extends Component {
             return alert('Set value of k');
         if (this.state.loading)
             return alert('Wait for the last experiment');
-        this.setState(
-            {
-                loading: true,
-                ds_results: [],
-                met_results: [],
-            })
+        this.beforeResponse();
         ClusteringAPI.getCustomDS(values.ds, values.algorithm, values.k)
             .then(response => {
-                this.setState({
-                    loading: false,
-                    ds_results: response.datasets,
-                    met_results: response.metrics,
-                })
+                this.afterResponse(response);
             });
 
     }
@@ -50,7 +44,28 @@ class CustomDSApp extends Component {
             show_cluster: true,
             n_sim: values.n_sim,
             ds: values.itr,
-
+        })
+    }
+    createScenarioCharts = (values) => {
+        this.beforeResponse();
+        ClusteringAPI.getScenario(values.scenario)
+            .then(response => {
+                this.afterResponse(response);
+            })
+    }
+    beforeResponse = () => {
+        this.setState(
+            {
+                loading: true,
+                ds_results: [],
+                met_results: [],
+            })
+    }
+    afterResponse = (response) => {
+        this.setState({
+            loading: false,
+            ds_results: response.datasets,
+            met_results: response.metrics,
         })
     }
     render() {
@@ -63,6 +78,11 @@ class CustomDSApp extends Component {
                         this.createMetricCharts(values)
                     )}
                 />
+                <CreateScenario
+                    scenarios={this.state.scenarios}
+                    onCreateScenario={values => (
+                        this.createScenarioCharts(values)
+                    )} />
                 <Loader loading={this.state.loading} />
                 <ClusterChartList ds_results={this.state.ds_results} sim={this.state.n_sim} />
                 {this.state.show_cluster && (

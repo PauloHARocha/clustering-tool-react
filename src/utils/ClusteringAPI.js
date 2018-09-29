@@ -16,5 +16,9 @@ export const getParam = () =>
     fetch(`${api}/param`)
         .then(res => res.json())
 
+export const getScenario = (scenario) =>     
+    fetch(`${api}/scenarios/${scenario}`)
+        .then(res => res.json())
+
 
 

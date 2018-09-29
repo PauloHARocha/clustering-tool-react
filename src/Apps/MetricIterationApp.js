@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import CreateScenario from '../Components/CreateScenario'
 import CreateMetricIteration from '../Components/CreateMetricIteration'
 import MultiMetricChartList from '../Components/MultiMetricChartList'
 import ClusterChartIteration from '../Components/ClusterChartIteration'
@@ -11,6 +12,7 @@ class MetricIterationApp extends Component {
     loading: false,
     datasets: [],
     algorithms: [],
+    scenarios: [],
     centroids: [],
     clusters: [],
     met_results: [],
@@ -22,19 +24,43 @@ class MetricIterationApp extends Component {
     ClusteringAPI.getParam().then(param => {
       this.setState({ 
         datasets: param.datasets,
-        algorithms: param.algorithms 
+        algorithms: param.algorithms,
+        scenarios: param.scenarios.iterations
       })
+      
     })
   }
-  createMetricCharts(values) {
+  createMetricCharts = (values) => {
     if (values.k === undefined)
       return alert('Set value of k');
     if (values.n_sim === undefined)
       return alert('Set number of simulations');
     if (this.state.loading)
       return alert('Wait for the last experiment');
+    this.beforeResponse();
+    ClusteringAPI.getMultiMetricIterations(values.dataset, values.algorithm, values.k, values.n_sim)
+    .then(response => {
+      this.afterResponse(response);
+    });
+    
+  }
+  createClusterChart = (values) => {
+    this.setState({
+      show_cluster: true,
+      n_sim: values.n_sim,
+      itr: values.itr,
+    })
+  }
+  createScenarioCharts = (values) => {
+    this.beforeResponse();
+    ClusteringAPI.getScenario(values.scenario)
+    .then(response => {
+        this.afterResponse(response);
+    })
+  }
+  beforeResponse = () => {
     this.setState(
-      { 
+      {
         loading: true,
         centroids: [],
         clusters: [],
@@ -43,25 +69,13 @@ class MetricIterationApp extends Component {
         n_sim: 0,
         itr: 0,
       })
-    
-    ClusteringAPI.getMultiMetricIterations(values.dataset, values.algorithm, values.k, values.n_sim)
-    .then(response => {
-      this.setState({
-        loading: false,
-        centroids: response.centroids,
-        clusters: response.clusters,
-        met_results: response.results,
-      })
-
-    });
-    
   }
-  createClusterChart(values){
+  afterResponse = (response) => {
     this.setState({
-      show_cluster: true,
-      n_sim: values.n_sim,
-      itr: values.itr,
-
+      loading: false,
+      centroids: response.centroids,
+      clusters: response.clusters,
+      met_results: response.results,
     })
   }
   render() {
@@ -74,6 +88,11 @@ class MetricIterationApp extends Component {
               this.createMetricCharts(values)
               )}
         />
+        <CreateScenario 
+          scenarios={this.state.scenarios} 
+          onCreateScenario={values => (
+            this.createScenarioCharts(values)
+          )}/>
         <Loader loading={this.state.loading}/>
         
         {this.state.show_cluster && (
