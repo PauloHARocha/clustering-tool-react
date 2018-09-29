@@ -84,7 +84,7 @@ class MetricIterationApp extends Component {
         )}
         <MultiMetricChartList 
           met_results={this.state.met_results}
-          axis={{ x: 'Values', y: 'Iterations' }}
+          axis={{ x: 'Iterations', y: 'Values' }}
           size={{ heigth: 300, width: 'large'}} //large, medium, small
           onClickChart = {values => (
             this.createClusterChart(values)

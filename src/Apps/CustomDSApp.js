@@ -76,7 +76,7 @@ class CustomDSApp extends Component {
                 )}
                 <MultiMetricChartList
                     met_results={this.state.met_results}
-                    axis = {{x:'Values', y: 'Datasets'}}
+                    axis={{ x: 'Datasets', y: 'Values'}}
                     size={{ heigth: 300, width: 'large' }} //large, medium, small
                     onClickChart={values => (
                         this.createClusterChart(values)
