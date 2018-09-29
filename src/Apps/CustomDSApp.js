@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import CreateCustomDS from '../Components/CreateCustomDS'
 import CreateScenario from '../Components/CreateScenario'
 import MultiMetricChartList from '../Components/MultiMetricChartList'
 import ClusterChartIteration from '../Components/ClusterChartIteration'
@@ -26,18 +25,6 @@ class CustomDSApp extends Component {
                 scenarios: param.scenarios.customds
             })
         })
-    }
-    createMetricCharts(values) {
-        if (values.k === undefined)
-            return alert('Set value of k');
-        if (this.state.loading)
-            return alert('Wait for the last experiment');
-        this.beforeResponse();
-        ClusteringAPI.getCustomDS(values.ds, values.algorithm, values.k)
-            .then(response => {
-                this.afterResponse(response);
-            });
-
     }
     createClusterChart(values) {
         this.setState({
@@ -71,13 +58,6 @@ class CustomDSApp extends Component {
     render() {
         return (
             <main >
-                <CreateCustomDS
-                    algorithms={this.state.algorithms}
-                    ds={[0, 1]}
-                    onCreateCustomDS={values => (
-                        this.createMetricCharts(values)
-                    )}
-                />
                 <CreateScenario
                     scenarios={this.state.scenarios}
                     onCreateScenario={values => (

@@ -8,7 +8,7 @@ class Loader extends Component {
             <div className='loader-container'>
                 {loading && (<div className='loader-content'>
                     <div className="loader"></div>
-                    <p>Do not change section, this can take a few minutes . . .</p>
+                    <p>Do not change section, this can take a few seconds . . .</p>
                     </div>)}
             </div>
         ) 

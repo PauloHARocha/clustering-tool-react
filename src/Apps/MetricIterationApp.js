@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import CreateScenario from '../Components/CreateScenario'
-import CreateMetricIteration from '../Components/CreateMetricIteration'
 import MultiMetricChartList from '../Components/MultiMetricChartList'
 import ClusterChartIteration from '../Components/ClusterChartIteration'
 import Loader from '../Components/Loader'
@@ -29,20 +28,6 @@ class MetricIterationApp extends Component {
       })
       
     })
-  }
-  createMetricCharts = (values) => {
-    if (values.k === undefined)
-      return alert('Set value of k');
-    if (values.n_sim === undefined)
-      return alert('Set number of simulations');
-    if (this.state.loading)
-      return alert('Wait for the last experiment');
-    this.beforeResponse();
-    ClusteringAPI.getMultiMetricIterations(values.dataset, values.algorithm, values.k, values.n_sim)
-    .then(response => {
-      this.afterResponse(response);
-    });
-    
   }
   createClusterChart = (values) => {
     this.setState({
@@ -81,13 +66,6 @@ class MetricIterationApp extends Component {
   render() {
     return (
       <main >
-        <CreateMetricIteration 
-          datasets={this.state.datasets}
-          algorithms={this.state.algorithms}
-          onCreateMetricIteration = {values => (
-              this.createMetricCharts(values)
-              )}
-        />
         <CreateScenario 
           scenarios={this.state.scenarios} 
           onCreateScenario={values => (
