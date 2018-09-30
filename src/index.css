@@ -102,6 +102,11 @@ h2, p{
     color: white;
 }
 
+.chart-container-larger {
+    width: 50%;
+    display: inline-block;
+}
+
 .chart-container-large {
     width: 33%;
     display: inline-block;
@@ -115,6 +120,13 @@ h2, p{
 .chart-container-small {
     width: 16.6%;
     display: inline-block;
+}
+
+@media only screen and (max-width: 550px) {
+    .chart-container-small, .chart-container-medium, .chart-container-large, 
+    .chart-container-larger {
+        width: 100%;
+    }
 }
 
 .loader-container {

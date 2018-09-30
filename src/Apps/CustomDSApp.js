@@ -19,10 +19,12 @@ class CustomDSApp extends Component {
         ds: 0,
     }
     componentDidMount() {
+        this.setState({loading: true})
         ClusteringAPI.getParam().then(param => {
             this.setState({
                 algorithms: param.algorithms,
-                scenarios: param.scenarios.customds
+                scenarios: param.scenarios.customds,
+                loading: false
             })
         })
     }

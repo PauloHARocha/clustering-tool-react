@@ -20,13 +20,14 @@ class MetricIterationApp extends Component {
     itr: 0,
   }
   componentDidMount() {
+    this.setState({ loading: true })
     ClusteringAPI.getParam().then(param => {
       this.setState({ 
         datasets: param.datasets,
         algorithms: param.algorithms,
-        scenarios: param.scenarios.iterations
-      })
-      
+        scenarios: param.scenarios.iterations,
+        loading: false
+      }) 
     })
   }
   createClusterChart = (values) => {
