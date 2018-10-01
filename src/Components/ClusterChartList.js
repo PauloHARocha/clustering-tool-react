@@ -19,7 +19,7 @@ class ClusterChartList extends Component {
         ))
         let clusterPoints = clusters.map( c => (
             c.values.map(data => (
-                { x: data[0], y: data[1], color: colors[parseInt(c.name, 10)] }
+                { x: data[0], y: data[1]}
             ))
         ))
         let data_centroid = {   
@@ -32,7 +32,7 @@ class ClusterChartList extends Component {
             }
         
         let data = [];
-        clusterPoints.forEach(cp => {
+        clusterPoints.forEach((cp, idx) => {
             let cluster_size = Object.keys(cp);
             cluster_size = cluster_size.length;
             
@@ -41,6 +41,7 @@ class ClusterChartList extends Component {
                 toolTipContent: "x: {x}<br>y: {y}",
                 markerType: 'circle',
                 markerSize: 2,
+                color: colors[parseInt(idx, 10)], 
                 name: `${cluster_size}`,
                 showInLegend: true,
                 dataPoints: cp
