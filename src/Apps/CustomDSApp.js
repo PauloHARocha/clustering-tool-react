@@ -46,6 +46,7 @@ class CustomDSApp extends Component {
         this.setState(
             {
                 loading: true,
+                show_cluster: false,
                 ds_results: [],
                 met_results: [],
             })
