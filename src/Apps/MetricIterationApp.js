@@ -3,12 +3,14 @@ import CreateScenario from '../Components/CreateScenario'
 import MultiMetricChartList from '../Components/MultiMetricChartList'
 import ClusterChartIteration from '../Components/ClusterChartIteration'
 import Loader from '../Components/Loader'
+import Error from '../Components/Error'
 import * as ClusteringAPI from '../utils/ClusteringAPI'
 
 
 class MetricIterationApp extends Component {
   state = {
     loading: false,
+    error: false,
     datasets: [],
     algorithms: [],
     scenarios: [],
@@ -28,7 +30,7 @@ class MetricIterationApp extends Component {
         scenarios: param.scenarios.iterations,
         loading: false
       }) 
-    })
+    }).catch(error => (this.showError(error)))
   }
   createClusterChart = (values) => {
     this.setState({
@@ -42,7 +44,8 @@ class MetricIterationApp extends Component {
     ClusteringAPI.getScenario(values.scenario)
     .then(response => {
         this.afterResponse(response);
-    })
+      })
+    .catch(error => (this.showError(error)))
   }
   beforeResponse = () => {
     this.setState(
@@ -64,16 +67,23 @@ class MetricIterationApp extends Component {
       met_results: response.results,
     })
   }
+  showError = (error) => {
+    console.log(error);
+    this.setState({
+      loading: false,
+      error: true
+    })
+  }
   render() {
     return (
       <main >
+        <Error error={this.state.error}/>
         <CreateScenario 
           scenarios={this.state.scenarios} 
           onCreateScenario={values => (
             this.createScenarioCharts(values)
           )}/>
         <Loader loading={this.state.loading}/>
-        
         {this.state.show_cluster && (
           <ClusterChartIteration
             centroids={this.state.centroids[this.state.n_sim][this.state.itr]}

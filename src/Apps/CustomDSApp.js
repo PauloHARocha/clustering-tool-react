@@ -4,12 +4,14 @@ import MultiMetricChartList from '../Components/MultiMetricChartList'
 import ClusterChartIteration from '../Components/ClusterChartIteration'
 import ClusterChartList from '../Components/ClusterChartList'
 import Loader from '../Components/Loader'
+import Error from '../Components/Error'
 import * as ClusteringAPI from '../utils/ClusteringAPI'
 
 
 class CustomDSApp extends Component {
     state = {
         loading: false,
+        error: false,
         algorithms: [],
         ds_results: [],
         scenarios: [],
@@ -26,7 +28,7 @@ class CustomDSApp extends Component {
                 scenarios: param.scenarios.customds,
                 loading: false
             })
-        })
+        }).catch(error => (this.showError(error)))
     }
     createClusterChart(values) {
         this.setState({
@@ -40,7 +42,7 @@ class CustomDSApp extends Component {
         ClusteringAPI.getScenario(values.scenario)
             .then(response => {
                 this.afterResponse(response);
-            })
+            }).catch(error => (this.showError(error)))
     }
     beforeResponse = () => {
         this.setState(
@@ -58,9 +60,17 @@ class CustomDSApp extends Component {
             met_results: response.metrics,
         })
     }
+    showError = (error) => {
+        console.log(error);
+        this.setState({
+            loading: false,
+            error: true
+        })
+    }
     render() {
         return (
             <main >
+                <Error error={this.state.error} />
                 <CreateScenario
                     scenarios={this.state.scenarios}
                     onCreateScenario={values => (
