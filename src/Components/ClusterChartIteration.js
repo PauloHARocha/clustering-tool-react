@@ -13,7 +13,7 @@ const colors = ["green", "red", "blue", "yellow", "purple",
     '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
 
 class ClusterChartIteration extends Component {
-    generateOptions(centroids, clusters, d_idxs, title, height, axis) {
+    generateOptions(centroids, clusters, d_idxs, title, height, axis, datasets) {
         let centroidPoints = centroids.map(c => (
             { x: c.values[d_idxs.x], y: c.values[d_idxs.y] }
         ))
@@ -46,9 +46,19 @@ class ClusterChartIteration extends Component {
                 dataPoints: cp
             })
         })
-        // console.log();
+        
         data.push(data_centroid);
-        // data.push(data_cluster);
+        let label_x = 'X';
+        let label_y = 'Y';
+        if(datasets !== undefined){
+            if(centroids[0].values.length === 4){
+                label_x = datasets[0].dimensions[d_idxs.x] 
+                label_y = datasets[0].dimensions[d_idxs.y] 
+            }else{
+                label_x = datasets[1].dimensions[d_idxs.x]
+                label_y = datasets[1].dimensions[d_idxs.y] 
+            }
+        }
         return {
             animationEnabled: true,
             zoomEnabled: true,
@@ -59,14 +69,14 @@ class ClusterChartIteration extends Component {
                 text: title//centroid.name
             },
             axisY: {
-                title: "Y",
+                title: label_y,
                 includeZero: false,
                 maximum: axis.y.maximum,
                 minimum: axis.y.minimum,
                 // suffix: "%"
             },
             axisX: {
-                title: "X",
+                title: label_x,
                 // prefix: "W",
                 maximum: axis.x.maximum,
                 minimum: axis.x.minimum,
@@ -83,7 +93,7 @@ class ClusterChartIteration extends Component {
         return idxs;
     }
     render() {
-        const { centroids, clusters, title, size, axis} = this.props;
+        const { centroids, clusters, title, size, axis, datasets} = this.props;
         const dimensions_idx = this.getDimensionsIdxs(centroids[0].values.length);
         return (
             <section className='list-chart-container'>
@@ -91,7 +101,7 @@ class ClusterChartIteration extends Component {
                     <div className={`chart-container-${size.width}`} key={idx}>
                         <CanvasJSChart
                             options={this.generateOptions(centroids, clusters, 
-                                d_idxs, title, size.height, axis)}
+                                d_idxs, title, size.height, axis, datasets)}
                         />
                     </div>
                 ))}

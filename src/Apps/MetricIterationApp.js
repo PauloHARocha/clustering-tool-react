@@ -88,6 +88,7 @@ class MetricIterationApp extends Component {
           <ClusterChartIteration
             centroids={this.state.centroids[this.state.n_sim][this.state.itr]}
             clusters={this.state.clusters[this.state.n_sim][this.state.itr]}
+            datasets={this.state.datasets}
             title={`Sim: ${this.state.n_sim} Itr: ${this.state.itr}`}
             axis={{ x: { minimum: 0, maximum: 1 }, y: {minimum: 0, maximum:1}}}
             size={{ heigth: 250, width: 'medium' }} //larger, large, medium, small
