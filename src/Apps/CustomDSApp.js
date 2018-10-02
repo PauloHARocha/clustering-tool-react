@@ -3,6 +3,7 @@ import CreateScenario from '../Components/CreateScenario'
 import MultiMetricChartList from '../Components/MultiMetricChartList'
 import ClusterChartIteration from '../Components/ClusterChartIteration'
 import ClusterChartList from '../Components/ClusterChartList'
+import SelectClusterChart from '../Components/SelectClusterChart'
 import Loader from '../Components/Loader'
 import Error from '../Components/Error'
 import * as ClusteringAPI from '../utils/ClusteringAPI'
@@ -71,13 +72,21 @@ class CustomDSApp extends Component {
         return (
             <main >
                 <Error error={this.state.error} />
+                
                 <CreateScenario
                     scenarios={this.state.scenarios}
                     onCreateScenario={values => (
                         this.createScenarioCharts(values)
                     )} />
                 <Loader loading={this.state.loading} />
+
                 <ClusterChartList ds_results={this.state.ds_results} sim={this.state.n_sim} />
+
+                <SelectClusterChart
+                    met_results={this.state.met_results}
+                    labels={{itr:'Datasets'}}
+                    onSelectClusterChart={values => (this.createClusterChart(values))} />
+                
                 {this.state.show_cluster && (
                     <ClusterChartIteration
                         centroids={this.state.ds_results[this.state.ds].centroids[this.state.n_sim]}
@@ -87,6 +96,7 @@ class CustomDSApp extends Component {
                         size={{ heigth: 300, width: 'large' }} //large, medium, small
                     />
                 )}
+
                 <MultiMetricChartList
                     met_results={this.state.met_results}
                     axis={{ x: 'Datasets', y: 'Values'}}

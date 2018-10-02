@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import CreateScenario from '../Components/CreateScenario'
 import MultiMetricChartList from '../Components/MultiMetricChartList'
 import ClusterChartIteration from '../Components/ClusterChartIteration'
+import SelectClusterChart from '../Components/SelectClusterChart'
 import Loader from '../Components/Loader'
 import Error from '../Components/Error'
 import * as ClusteringAPI from '../utils/ClusteringAPI'
@@ -84,6 +85,11 @@ class MetricIterationApp extends Component {
             this.createScenarioCharts(values)
           )}/>
         <Loader loading={this.state.loading}/>
+        
+        <SelectClusterChart 
+          met_results={this.state.met_results} 
+          onSelectClusterChart={values => (this.createClusterChart(values))}/>
+
         {this.state.show_cluster && (
           <ClusterChartIteration
             centroids={this.state.centroids[this.state.n_sim][this.state.itr]}
@@ -98,9 +104,7 @@ class MetricIterationApp extends Component {
           met_results={this.state.met_results}
           axis={{ x: 'Iterations', y: 'Values' }}
           size={{ heigth: 300, width: 'larger'}} //larger, large, medium, small
-          onClickChart = {values => (
-            this.createClusterChart(values)
-          )}
+          onClickChart = {values => (this.createClusterChart(values))}
           />
       </main>
     );
